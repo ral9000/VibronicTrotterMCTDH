@@ -30,4 +30,4 @@ for deltaT in DELTATs:
         data = [std_pops_mctdh, eff_pops_mctdh, errors_mctdh]
         pickle.dump(data, DIROUTPUT)
 
-print('**************\nDRIVER0_INTERPRET.py successfully terminating.\n**************')
+print('**************\nMAIN_INTERPRET.py successfully terminating.\n**************')

@@ -93,4 +93,4 @@ if SUBMIT_SLURM:
         print(f'Submitting {file}')
         subprocess.run(['sbatch', file], check=True) 
 
-print('**************\nDRIVER0_RUN.py successfully terminating.\n**************')
+print('**************\nMAIN_RUN.py successfully terminating.\n**************')
