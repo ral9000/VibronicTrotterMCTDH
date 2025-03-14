@@ -10,7 +10,7 @@ filehandler = open('NAME.pkl', 'rb')
 omegas, couplings = pickle.load(filehandler)
 ```
 
-where omegas is a 1d array of length `n`, and couplings is a list of the coupling arrays. The coupling arrays are 
+where omegas is a 1d array of length `p`, and couplings is a list of the coupling arrays. The coupling arrays are 
 ordered in `couplings` by ascending order in Q. Typically:
 
 ```
