@@ -14,27 +14,13 @@ achieved.
 
 def read_populations(dir, name, n_states, no_err_read=False):
 
-
     if no_err_read: 
-        """
-        Just gets the standard population trajectories
-        """
-
         std_pops = read_rdcheckfile(name, dir, n_states)
         return std_pops 
 
     errors, std_pops, eff_pops = get_errors(dir, system=name, n_states=n_states, return_pop_series=True)
 
     return std_pops, eff_pops, errors 
-
-def plpops(std_pops, eff_pops, errors, name, show=False):
-
-
-    plt.save(f'{name}.png')
-
-    if show:
-        plt.show()
-
 
 def check_convergence(dir, name, spf_range, n_states, ctol = 0.1, plotting=True):
 

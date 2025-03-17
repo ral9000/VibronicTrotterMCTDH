@@ -129,8 +129,6 @@ def get_reduced_model(omegas, couplings, m_max, order_max=2, states=None, strate
     mode_measures = rank_modes(omegas, couplings_red, ranking_type=strategy)
     modes_ordered = dict(sorted(mode_measures.items(), key = lambda item: item[1], reverse=True))
     modes_keep = list(modes_ordered.keys())[:m_max]
-    print('MODES TO KEEP!:')
-    print(modes_keep)
     omegas_red = omegas[modes_keep]
     
     for order in couplings_red:
