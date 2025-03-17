@@ -1,6 +1,6 @@
 """
 Basic script for generating all required MCTDH directories and input files, and
-automatically submitting the jobs to a slurm queue.
+automatically submitting the jobs to a slurm queue. Example: DABNA
 """
 
 import pickle
