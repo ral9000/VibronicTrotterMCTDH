@@ -119,10 +119,14 @@ if SUBMIT_SLURM:
     import glob
     import subprocess
 
-    slurm_files = glob.glob(os.path.join("./", "*.slurm"))
+    for DELTAT in DELTATs:
+        DIR = f"./runs/{DIRNAME}/dt={DELTAT}"
+        os.chdir(DIR)
+        slurm_files = glob.glob("*.slurm")
 
-    for file in slurm_files:
-        print(f"Submitting {file}")
-        subprocess.run(["sbatch", file], check=True)
+        for file in slurm_files:
+            print(f"!! Submitting {file} !!")
+            subprocess.run(["sbatch", file], check=True)
+        os.chdir("../../..")
 
 print("**************\nMAIN_RUN.py successfully terminating.\n**************")
