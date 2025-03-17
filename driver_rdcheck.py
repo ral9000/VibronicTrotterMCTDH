@@ -228,17 +228,6 @@ def get_error_metrics(std_popseries, eff_popseries, n_states, t_max=None):
     return errors_total, errors_mean, errors_var, errors_max, errors_at_finalt
 
 
-"""
-To do:
-- quickly implement functionality for plotting the error metrics as functions of m
-- fit functions to the results to extrapolate errors
-
-running calculations: 
-- start doing some small deltaT calculations as well. so far we've only done deltaT = 0.25. 
-- for instance, try deltaT = 0.016.
-"""
-
-
 if __name__ == "__main__":
 
     deltaT_series = [0.1]
