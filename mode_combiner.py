@@ -1,4 +1,3 @@
-
 def combine_by_frequency(mode_labels, omegas, target_binsize=4):
     """
     Inputs:
@@ -8,8 +7,8 @@ def combine_by_frequency(mode_labels, omegas, target_binsize=4):
     Outputs: a list of lists describing the combined modes in terms of the physical modes:
         e.g., [[`mode1`, `mode2`, `mode6`], [`mode3`, `mode4`, `mode5`]]
 
-        if `mode1`, `mode2`, and `mode6` were combined into a logical mode 
-        and same with 3 remaining 
+        if `mode1`, `mode2`, and `mode6` were combined into a logical mode
+        and same with 3 remaining
 
     """
 
@@ -24,7 +23,7 @@ def combine_by_frequency(mode_labels, omegas, target_binsize=4):
             bins.append(current_bin)
             current_bin = []
         current_bin.append(mode)
-    
+
     if current_bin:
         bins.append(current_bin)
 

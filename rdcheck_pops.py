@@ -1,41 +1,45 @@
-import subprocess 
+import subprocess
+
 
 def read_rdcheckfile(name, dir, n_states):
     """
     Retreives the time series of diabatic state populations
     """
-    result = subprocess.run(["rdcheck86", "-e"], cwd=f'./{dir}/{name}', capture_output=True, text=True)
+    result = subprocess.run(
+        ["rdcheck86", "-e"], cwd=f"./{dir}/{name}", capture_output=True, text=True
+    )
 
     populations = {}
 
     # Print the output
     state_pop_lines = []
-    recording=False
-    for line in result.stdout.split('\n'):
+    recording = False
+    for line in result.stdout.split("\n"):
         if recording:
             state_pop_lines.append(line)
-        if '  time[fs]' in line:
-            recording=True
+        if "  time[fs]" in line:
+            recording = True
 
     pops_at_t = []
     for line in state_pop_lines:
-        if 'time' not in line and '---' not in line and line != '':
+        if "time" not in line and "---" not in line and line != "":
             print(line)
-            parsedline = ' '.join(line.split()).split(' ')
+            parsedline = " ".join(line.split()).split(" ")
             t = float(parsedline[0])
             state = int(parsedline[1])
             pop = float(parsedline[2])
-            if state == 1: #resets local counter 
+            if state == 1:  # resets local counter
                 pops_at_t = []
             pops_at_t.append(pop)
             if state == n_states:
                 populations[t] = pops_at_t
     return populations
 
+
 def get_errors(dir, system, n_states, return_pop_series=True):
 
-    standard_pops = read_rdcheckfile(name=f'{system}', dir=dir, n_states=n_states)
-    effective_pops = read_rdcheckfile(name=f'{system}_err', dir=dir, n_states = n_states)
+    standard_pops = read_rdcheckfile(name=f"{system}", dir=dir, n_states=n_states)
+    effective_pops = read_rdcheckfile(name=f"{system}_err", dir=dir, n_states=n_states)
 
     assert standard_pops.keys() == effective_pops.keys()
 
@@ -45,12 +49,13 @@ def get_errors(dir, system, n_states, return_pop_series=True):
         pop_errs = []
         for idx in range(n_states):
             pop_errs.append(abs(standard_pops[t][idx] - effective_pops[t][idx]))
-        errors[t] = pop_errs 
-        #print(f'Errors at {t} fs : {pop_errs}')
+        errors[t] = pop_errs
+        # print(f'Errors at {t} fs : {pop_errs}')
 
     if return_pop_series:
         return errors, standard_pops, effective_pops
     return errors
+
 
 # m=2
 # deltaT = 0.25
@@ -62,7 +67,7 @@ def get_errors(dir, system, n_states, return_pop_series=True):
 # # for t in error_time_series:
 # #     print(f'{t}: {error_time_series[t]}')
 
-# import matplotlib.pyplot as plt 
+# import matplotlib.pyplot as plt
 
 # # max_errors = {}
 # # for m in range(1, 9):

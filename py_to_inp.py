@@ -1,64 +1,66 @@
-import numpy as np 
-
+import numpy as np
 
 
 def generate_spf_scheme(logical_modes, spfs_per_state, n_states):
 
-    spf_nums_str = ','.join([str(spfs_per_state) for _ in range(n_states)])
-    scheme_str = ''
-    for logical_mode in logical_modes: 
-        logical_mode_str = ', '.join(logical_mode)
-        scheme_str += f'{logical_mode_str} = {spf_nums_str}\n'
+    spf_nums_str = ",".join([str(spfs_per_state) for _ in range(n_states)])
+    scheme_str = ""
+    for logical_mode in logical_modes:
+        logical_mode_str = ", ".join(logical_mode)
+        scheme_str += f"{logical_mode_str} = {spf_nums_str}\n"
 
-    return(scheme_str)
+    return scheme_str
 
 
-def generate_primitive_basis_section(n, m, n_grid, basis='HO'):
+def generate_primitive_basis_section(n, m, n_grid, basis="HO"):
 
-    input_str = ''
+    input_str = ""
     for idx in range(m):
-        input_str += f'    mode{idx+1}     {basis}     {n_grid}   0.0   1.0   1.0\n'
-    input_str += f'    el        el     {n}'
+        input_str += f"    mode{idx+1}     {basis}     {n_grid}   0.0   1.0   1.0\n"
+    input_str += f"    el        el     {n}"
     return input_str
 
 
-def generate_init_wf_section(n, m, init_state = 0, basis='HO'):
+def generate_init_wf_section(n, m, init_state=0, basis="HO"):
 
-    input_str = f'build\ninit_state = {init_state+1}'
+    input_str = f"build\ninit_state = {init_state+1}"
     for idx in range(m):
-        input_str += f'\nmode{idx+1}       {basis}      0.0    0.0    1.0'
-    input_str += '\nend-build'
+        input_str += f"\nmode{idx+1}       {basis}      0.0    0.0    1.0"
+    input_str += "\nend-build"
     return input_str
+
 
 def generate_spf_basis_section(m, logical_modes, spfs_per_state, n_states, multi_set=True):
-    
     """
     Currently only supports single set
     """
 
     if multi_set:
-        input_str = 'multi-set\n'
+        input_str = "multi-set\n"
 
     if len(logical_modes) == 1:
-        spfs_per_state = 1 #avoids redundant configurations
+        spfs_per_state = 1  # avoids redundant configurations
 
     input_str += generate_spf_scheme(logical_modes, spfs_per_state, n_states)
 
     return input_str
 
-def generate_inp(n_states, 
-                 n_modes, 
-                 n_grid, 
-                 logical_modes,
-                 spfs_per_state, 
-                 init_state, 
-                 t_max=1000, 
-                 run_name=None, 
-                 alloc_sec = None, 
-                 opname=None, 
-                 pthreads=1,
-                 EXACT=False):
-    exact_keyword = ''
+
+def generate_inp(
+    n_states,
+    n_modes,
+    n_grid,
+    logical_modes,
+    spfs_per_state,
+    init_state,
+    t_max=1000,
+    run_name=None,
+    alloc_sec=None,
+    opname=None,
+    pthreads=1,
+    EXACT=False,
+):
+    exact_keyword = ""
     integrator_sec = """\nINTEGRATOR-SECTION
                           #nohsym
                           CMF/var = 0.5,  1.0d-05
@@ -69,15 +71,21 @@ def generate_inp(n_states,
                           end-integrator-section
                           """
     if EXACT:
-        exact_keyword = 'exact'
-        integrator_sec  = """\nINTEGRATOR-SECTION
+        exact_keyword = "exact"
+        integrator_sec = """\nINTEGRATOR-SECTION
                                #nohsym
                                end-integrator-section
                           """
     else:
-        spf_basis_section_str = generate_spf_basis_section(n_modes, logical_modes, spfs_per_state, n_states)
-    primitive_basis_section_str = generate_primitive_basis_section(n_states, n_modes, n_grid, basis='HO')
-    init_wf_section_str = generate_init_wf_section(n_states, n_modes,init_state = init_state, basis='HO')
+        spf_basis_section_str = generate_spf_basis_section(
+            n_modes, logical_modes, spfs_per_state, n_states
+        )
+    primitive_basis_section_str = generate_primitive_basis_section(
+        n_states, n_modes, n_grid, basis="HO"
+    )
+    init_wf_section_str = generate_init_wf_section(
+        n_states, n_modes, init_state=init_state, basis="HO"
+    )
     default_alloc_str = """maxmuld = 10000
 maxfac = 10000
 maxkoe = 10000
@@ -88,12 +96,12 @@ maxhop = 10000
         alloc_str = default_alloc_str
 
     else:
-        alloc_str = ''
+        alloc_str = ""
         for key in alloc_sec:
-            alloc_str += f'{key} = {alloc_sec[key]}\n'
+            alloc_str += f"{key} = {alloc_sec[key]}\n"
 
     if opname is None:
-        opname = run_name 
+        opname = run_name
 
     file_str = f"""
 RUN-SECTION
@@ -128,4 +136,3 @@ end-init_wf-section
 \nend-input
 """
     return file_str
-
