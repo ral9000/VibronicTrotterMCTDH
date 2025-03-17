@@ -1,7 +1,8 @@
 
 # Description  
 
-This code is for ...
+This code is for using MCTDH vibronic dynamics simulations to estimate the effect of Trotter approximation on diabatic electronic state populations. 
+
 
 # Usage 
 
@@ -10,7 +11,7 @@ This code is for ...
 mention that this instantiates a data file with instance parameters (number of states, number of modes, couplings, etc.). The full list of parameters is:
 
 - `N_states` : Number of electronic states, `int` 
-- `M_modes` : Number of vibrational modes, int 
+- `M_modes` : Number of vibrational modes, `int` 
 - `deltaT` : The Trotter timestep used in obtaining the Trotter effective Hamiltonian, `float`
 - `Tmax` :  The maximum time propagation, `float` 
 - `omegas` : The vibrational mode frequencies, `list`
@@ -19,7 +20,7 @@ mention that this instantiates a data file with instance parameters (number of s
 - `init_state` : The index of the initial electronic state used in the dynamics simulation, `int` 
 - `exact` : Whether an exact MCTDH calculation was specified for this run, `bool`
 
-## 2. Running the MCTDH calculations 
+## 2. Running the MCTDH simulations
 
 mention that this can be done by setting `DO_RUN` to True in the run scripts, or just use something like script `submit_jobs.py`  if you want to submit them later.
 
@@ -40,6 +41,10 @@ should provide a dictionary `data` with the same keys as listed before, but with
 - `std_trajectories` : a dictionary with keys being timestamps in femtoseconds, and values being the electronic state populations as propagated by the standard Hamiltonian.
 - `eff_trajectories` : same as for `std_trajectories`, but propagated by the Trotter effective Hamiltonian.
 - `error_trajectories` : a dictionary with keys being timestamps in femtoseconds, with values being the absolute magnitude of differences between electronic state populations propagated by the standard and Trotter effective Hamiltonian.
+
+If these dictionaries are empty, its likely that the MCTDH simulation has not been ran yet. 
+
+# Dependencies 
 
 1) Pennylane branch `product-formula-framework`: https://github.com/PennyLaneAI/pennylane/tree/product-formula-framework
 
