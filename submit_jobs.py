@@ -12,10 +12,10 @@ DO_RUN = False  # if True, attempts to submit the jobs to the slurm scheduler.
 
 for DELTAT in DELTATs:
 
-    DIR = f"./runs/EXPS_DABNA/dt={DELTAT}"
+    DIR = f"./runs/EXPS_NO4A/dt={DELTAT}"
     print(DIR)
     os.chdir(DIR)
-    slurm_files = glob.glob("*.slurm")
+    slurm_files = glob.glob("*exact*slurm*")
 
     for file in slurm_files:
         print(f"Found {file}")

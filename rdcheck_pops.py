@@ -1,25 +1,39 @@
 import subprocess
 
 
-def read_rdcheckfile(name, dir, n_states):
+def read_rdcheckfile(name, dir, n_states, runrdcheck=True):
     """
     Retreives the time series of diabatic state populations
     """
-    result = subprocess.run(
-        ["rdcheck86", "-e"], cwd=f"./{dir}/{name}", capture_output=True, text=True
-    )
 
+    if runrdcheck:
+        result = subprocess.run(
+            ["rdcheck86", "-e"], cwd=f"./{dir}/{name}", capture_output=True, text=True
+        )
+
+    else: #read the content of rdcheck86 -e directly 
+        with open(f"{dir}{name}", "r") as file:
+            result = file.read()  # Read the entire file content
     populations = {}
 
     # Print the output
-    state_pop_lines = []
-    recording = False
-    for line in result.stdout.split("\n"):
-        if recording:
-            state_pop_lines.append(line)
-        if "  time[fs]" in line:
-            recording = True
+    if runrdcheck:
+        state_pop_lines = []
+        recording = False
+        for line in result.stdout.split("\n"):
+            if recording:
+                state_pop_lines.append(line)
+            if "  time[fs]" in line:
+                recording = True
 
+    else:
+        state_pop_lines = []
+        recording = False
+        for line in result.split("\n"):
+            if recording:
+                state_pop_lines.append(line)
+            if "  time[fs]" in line:
+                recording = True
     pops_at_t = []
     for line in state_pop_lines:
         if "time" not in line and "---" not in line and line != "":
@@ -36,10 +50,11 @@ def read_rdcheckfile(name, dir, n_states):
     return populations
 
 
-def get_errors(dir, system, n_states, return_pop_series=True):
 
-    standard_pops = read_rdcheckfile(name=f"{system}", dir=dir, n_states=n_states)
-    effective_pops = read_rdcheckfile(name=f"{system}_err", dir=dir, n_states=n_states)
+def get_errors(dir, system, n_states, return_pop_series=True, runrdcheck=True):
+
+    standard_pops = read_rdcheckfile(name=f"{system}", dir=dir, n_states=n_states, runrdcheck=runrdcheck)
+    effective_pops = read_rdcheckfile(name=f"{system}_err", dir=dir, n_states=n_states, runrdcheck=runrdcheck)
 
     assert standard_pops.keys() == effective_pops.keys()
 

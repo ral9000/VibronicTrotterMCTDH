@@ -140,7 +140,7 @@ def map_terms(block_operator, thresh=1e-12):
         for J in range(n):
             for term in block_operator.block(I, J).ops:
 
-                shape = (m,) * len(term.ops)
+                #shape = (m,) * len(term.ops)
                 indices = term.coeffs.nonzero()
                 # print(f'number of possible indices: {m**len(term.ops)}')
                 # print(f'number of nonzero indices: {len(list(indices))}')
@@ -184,7 +184,10 @@ def generate_parameter_section(param_dict, units="ev"):
 
 
 def generate_hamiltonian_section(param_dict, m):
-
+    print("NUMBER OF TERMS IN PARAM_DICT")
+    print(len(param_dict))
+    for key in param_dict:
+            print(f'{key} : {param_dict[key]}')
     input_str = "modes | el |"
     for idx in range(m):
         input_str += f" mode{idx+1} "
@@ -212,9 +215,11 @@ def generate_hamiltonian_section(param_dict, m):
     return input_str
 
 
-def generate_op(vibronic_block_operator, m, run_name=None):
+def generate_op(vibronic_block_operator=None, m=None, run_name=None, param_dict =None):
 
-    param_dict = map_terms(vibronic_block_operator)
+    if param_dict is None:
+        param_dict = map_terms(vibronic_block_operator)
+
     hamiltonian_section_str = generate_hamiltonian_section(param_dict, m)
     parameter_section_str = generate_parameter_section(param_dict, units="ev")
 
@@ -222,7 +227,7 @@ def generate_op(vibronic_block_operator, m, run_name=None):
     maxhtm = int(2 * maxkoe)  # Maximal number of operators for building the Hamiltonian(s)
     maxhop = int(2 * maxkoe)  # Maximal number of labels used in operators
 
-    metadata = {"maxkoe": maxkoe, "maxhtm": maxhtm, "maxhop": maxhop, "maxfac": 400}
+    metadata = {"maxkoe": maxkoe, "maxhtm": maxhtm, "maxhop": maxhop, "maxfac": 600}
     for key in metadata:
         print(f"{key} : {metadata[key]}")
 

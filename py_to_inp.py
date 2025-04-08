@@ -58,24 +58,27 @@ def generate_inp(
     alloc_sec=None,
     opname=None,
     pthreads=1,
-    EXACT=False,
+    exact=False,
 ):
+
     exact_keyword = ""
     integrator_sec = """\nINTEGRATOR-SECTION
-                          #nohsym
-                          CMF/var = 0.5,  1.0d-05
-                          BS/spf  =  7 ,  1.0d-05 ,  2.5d-04
-                          SIL/A   =  5 ,  1.0d-05
-                          #CMF
-                          #RK5 = 1.0d-7
-                          end-integrator-section
-                          """
-    if EXACT:
+    #nohsym
+    CMF/var = 0.5,  1.0d-05
+    BS/spf  =  7 ,  1.0d-05 ,  2.5d-04
+    SIL/A   =  5 ,  1.0d-05
+    #CMF
+    #RK5 = 1.0d-7
+end-integrator-section
+    """
+    if exact:
         exact_keyword = "exact"
         integrator_sec = """\nINTEGRATOR-SECTION
-                               #nohsym
-                               end-integrator-section
-                          """
+    #nohsym
+    SIL/all   =  20,  1.0d-12
+end-integrator-section
+    """
+        spf_basis_section_str = ''
     else:
         spf_basis_section_str = generate_spf_basis_section(
             n_modes, logical_modes, spfs_per_state, n_states
@@ -135,4 +138,5 @@ end-primitive-basis-section
 end-init_wf-section
 \nend-input
 """
+
     return file_str

@@ -115,7 +115,6 @@ def get_truncated_coupling_arrays(
 
     return [coupling_arrays[0], subcoupling_arr_lin, subcoupling_arr_quad]
 
-
 def get_reduced_model(omegas, couplings, m_max, order_max=2, states=None, strategy=None):
     """
     `omegas` and `couplings` are the original omega and coupling tensors

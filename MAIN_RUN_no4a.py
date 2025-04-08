@@ -18,7 +18,7 @@ from pennylane.labs.pf.vibronic import (
 PARAMETERS
 """
 NUM_STATES = 5
-NUM_MODEs = list(range(1, 10 + 1))
+NUM_MODEs = list(range(1, 3 + 1))
 DELTATs = [0.001, 0.01, 0.1, 1.0]
 TMAX = 500
 VIBHAMFILE = "./VCHLIB/n4o4a_sf.pkl"
@@ -26,7 +26,7 @@ DIRNAME = "EXPS_NO4A"
 INIT_STATE = 3  # S0S1 state
 SUBMIT_SLURM = False
 PTHREADS = 64
-EXACT = False
+EXACT = True
 BASENAME = "no4a"
 
 
@@ -75,6 +75,9 @@ for NUM_MODE in NUM_MODEs:
 
         jobdir = f"{BASENAME}_{NUM_STATES}s_{NUM_MODE}m_t{TMAX}"
 
+        if EXACT:
+            jobdir += '_exact'
+
         parameters = {
             "N_states": NUM_STATES,
             "M_modes": NUM_MODE,
@@ -90,6 +93,8 @@ for NUM_MODE in NUM_MODEs:
         # save parameters to a pickle file in ./data
 
         datafile_name = f"{jobdir}_dt={DELTAT}"
+        # if EXACT:
+        #     datafile_name += '_exact'
         with open(f"./data/{datafile_name}.pkl", "wb") as f:
             pickle.dump(parameters, f)
 

@@ -13,14 +13,14 @@ achieved.
 """
 
 
-def read_populations(dir, name, n_states, no_err_read=False):
+def read_populations(dir, name, n_states, no_err_read=False, runrdcheck=True):
 
     if no_err_read:
-        std_pops = read_rdcheckfile(name, dir, n_states)
+        std_pops = read_rdcheckfile(name, dir, n_states, runrdcheck=runrdcheck)
         return std_pops
 
     errors, std_pops, eff_pops = get_errors(
-        dir, system=name, n_states=n_states, return_pop_series=True
+        dir, system=name, n_states=n_states, return_pop_series=True, runrdcheck=runrdcheck
     )
 
     return std_pops, eff_pops, errors
