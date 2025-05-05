@@ -1,0 +1,45 @@
+from driver_rdcheck import read_populations
+import pickle
+
+"""
+PARAMETERS
+"""
+
+DIRNAME = "EXPS_NADH_C1_S01"
+BASENAME = "nadh_c1_s01"
+NUM_MODEs = list(range(1, 6 + 1))
+NUM_STATE = 3
+DELTATs = [0.001, 0.01, 0.1, 1.0]
+TMAX = 500
+
+for NUM_MODE in NUM_MODEs:
+    for DELTAT in DELTATs:
+
+        datafilename = f"./data/{BASENAME}_{NUM_STATE}s_{NUM_MODE}m_t{TMAX}_dt={DELTAT}.pkl"
+
+        # Load the pickle object
+        print(f">>Loading {datafilename}.")
+        with open(datafilename, "rb") as file:
+            data = pickle.load(file)
+
+        """
+        Read the population results 
+        """
+
+        popdir = f"./runs/{DIRNAME}/dt={DELTAT}/"
+        popfile = f"{BASENAME}_{NUM_STATE}s_{NUM_MODE}m_t{TMAX}"
+        print(f">>Reading MCTDH population trajectories from {popdir}{popfile}")
+        std_pops, eff_pops, errors = read_populations(
+            dir=popdir, name=popfile, n_states=NUM_STATE, readtype='both'
+        )
+        # Modify the object
+        data["std_trajectories"] = std_pops
+        data["eff_trajectories"] = eff_pops
+        data["error_trajectories"] = errors
+
+        # Save the modified object
+        print(f">>Writing std/eff trajectories and the errors to {datafilename}.\n")
+        with open(datafilename, "wb") as file:
+            pickle.dump(data, file)
+
+print("**************\nMAIN_INTERPRET.py successfully terminating.\n**************")

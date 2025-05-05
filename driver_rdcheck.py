@@ -13,11 +13,19 @@ achieved.
 """
 
 
-def read_populations(dir, name, n_states, no_err_read=False, runrdcheck=True):
+def read_populations(dir, name, n_states, readtype="both", runrdcheck=True):
 
-    if no_err_read:
+    if readtype not in ["both", "err", "std"]:
+        return ValueError(f'Expected `readtype` to be "both", "err", or "std". Instead got {readtype}.')
+
+
+    if readtype =='std':
         std_pops = read_rdcheckfile(name, dir, n_states, runrdcheck=runrdcheck)
         return std_pops
+
+    elif readtype == "eff":
+        eff_pops = read_rdcheckfile(f"{name}_err", dir, n_states, runrdcheck=runrdcheck)
+        return eff_pops 
 
     errors, std_pops, eff_pops = get_errors(
         dir, system=name, n_states=n_states, return_pop_series=True, runrdcheck=runrdcheck

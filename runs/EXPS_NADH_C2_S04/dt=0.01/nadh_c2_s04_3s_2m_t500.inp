@@ -1,0 +1,52 @@
+
+RUN-SECTION
+usepthreads = 64
+name = nadh_c2_s04_3s_2m_t500
+title = nadh_c2_s04_3s_2m_t500
+propagation exact
+tfinal = 500  
+tout = 5.0  
+tpsi = 5.0
+geninwf
+psi
+#genpes
+auto
+end-run-section
+
+OPERATOR-SECTION
+opname = nadh_c2_s04_3s_2m_t500
+end-operator-section
+
+ALLOC-SECTION
+maxkoe = 66
+maxhtm = 132
+maxhop = 132
+maxfac = 600
+
+end-alloc-section
+
+SPF-BASIS-SECTION
+
+end-spf-basis-section
+
+PRIMITIVE-BASIS-SECTION
+    mode1     HO     8   0.0   1.0   1.0
+    mode2     HO     8   0.0   1.0   1.0
+    el        el     3
+end-primitive-basis-section
+
+INTEGRATOR-SECTION
+    #nohsym
+    SIL/all   =  20,  1.0d-12
+end-integrator-section
+    
+
+INIT_WF-SECTION
+build
+init_state = 3
+mode1       HO      0.0    0.0    1.0
+mode2       HO      0.0    0.0    1.0
+end-build 
+end-init_wf-section
+
+end-input
